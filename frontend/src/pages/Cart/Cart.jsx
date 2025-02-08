@@ -5,6 +5,9 @@ import { StoreContext } from "../../Context/StoreContext";
 import { use } from "react";
 
 const Cart = () => {
+  const cart = async (event) => {
+    event.preventDefault();
+  };
   const { cartItems, food_list, removeFromCart, getTotalCartAmount, url } =
     useContext(StoreContext);
   const navigate = useNavigate();
@@ -63,7 +66,7 @@ const Cart = () => {
             <div className="cart-total-details">
               <p>Total</p>
               <p>
-                ₹{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 2}
+                ₹{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 20}
               </p>
             </div>
             <button onClick={() => navigate("/place-order")}>
