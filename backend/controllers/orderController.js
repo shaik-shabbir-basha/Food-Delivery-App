@@ -2,6 +2,7 @@ import orderModel from "../models/orderModel.js";
 import userModel from "../models/userModel.js";
 import Razorpay from "razorpay";
 import crypto from "crypto";
+import { log } from "console";
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_ID_KEY,
@@ -103,7 +104,6 @@ const verifyOrder = async (req, res) => {
       {
         payment: true,
         razorpayPaymentId: razorpay_payment_id,
-        status: "completed", // Update status to "completed"
       },
       { new: true } // Return the updated document
     );
@@ -137,4 +137,27 @@ const userOrders = async (req, res) => {
   }
 };
 
-export { placeOrder, verifyOrder, userOrders };
+//listing orders for admin panel
+const listOrders = async (req, res) => {
+  try {
+    const orders = await orderModel.find({});
+    res.json({ success: true, data: orders });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: "Error in List Orders" });
+  }
+};
+
+//api for updating order status
+const updateStatus = async (req, res) => {
+  try {
+    await orderModel.findByIdAndUpdate(req.body.orderId, {
+      status: req.body.status,
+    });
+    res.json({ success: true, message: "Status Updated" });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: "Error in Update Status" });
+  }
+};
+export { placeOrder, verifyOrder, userOrders, listOrders, updateStatus };

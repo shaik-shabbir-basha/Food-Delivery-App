@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import "./PlaceOrder.css";
-import { StoreContext } from "../../Context/StoreContext";
+import { StoreContext } from "../../context/StoreContext";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -38,7 +38,13 @@ const PlaceOrder = () => {
     const { name, value } = event.target;
     setData((prevData) => ({ ...prevData, [name]: value }));
   };
-
+  useEffect(() => {
+    if (!token) {
+      navigate("/cart");
+    } else if (getTotalCartAmount() === 0) {
+      navigate("/cart");
+    }
+  }, [token]);
   const placeOrder = async (event) => {
     event.preventDefault();
 
